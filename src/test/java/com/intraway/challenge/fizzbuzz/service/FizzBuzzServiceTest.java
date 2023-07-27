@@ -134,6 +134,32 @@ class FizzBuzzServiceTest {
     }
 
     @Test
+    void fizzBuzzWithNegatives_success(){
+        int min = -5;
+        int max = 10;
+        FizzBuzz fizzBuzz = new FizzBuzz();
+        fizzBuzz.setMax(min);
+        fizzBuzz.setMin(max);
+        fizzBuzz.setId(1L);
+        LocalDateTime now = LocalDateTime.now();
+        fizzBuzz.setCreatedAt(now);
+        when(fizzBuzzRepository.save(any(FizzBuzz.class))).thenReturn(fizzBuzz);
+        FizzBuzzDTO fizzBuzzResult = fizzBuzzService.getFizzBuzzResult(min, max);
+
+        assertEquals(String.valueOf(fizzBuzz.getId()), fizzBuzzResult.getCode());
+        assertEquals("Se encontraron múltiplos de 3 y 5", fizzBuzzResult.getDescription());
+        assertEquals(String.join(",", List.of("Buzz,-4,Fizz,-2,-1,FizzBuzz,1,2,Fizz,4,Buzz,Fizz,7,8,Fizz,Buzz")), fizzBuzzResult.getList());
+        assertEquals(TimeUtil.localDateTimeToMillis(now), fizzBuzzResult.getTimestamp());
+
+        ArgumentCaptor<FizzBuzz> fizzBuzzArgumentCaptor = ArgumentCaptor.forClass(FizzBuzz.class);
+        verify(fizzBuzzRepository).save(fizzBuzzArgumentCaptor.capture());
+        FizzBuzz savedFizzBuzz = fizzBuzzArgumentCaptor.getValue();
+
+        assertEquals(min, savedFizzBuzz.getMin());
+        assertEquals(max, savedFizzBuzz.getMax());
+    }
+
+    @Test
     void minGreaterThanMax_error(){
         Throwable throwable = catchThrowable(() -> fizzBuzzService.getFizzBuzzResult(7, -1));
         assertEquals(throwable.getClass(), IllegalArgumentException.class);
