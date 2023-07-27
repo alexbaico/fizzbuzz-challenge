@@ -21,6 +21,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+/*
+ * We only save min and max values, since the other fields in
+ * the response can be calculated based on these two
+ */
 public class FizzBuzz {
 
     @Id

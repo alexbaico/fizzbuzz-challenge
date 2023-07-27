@@ -31,6 +31,7 @@ public class FizzBuzzService {
         log.info("Calculating FizzBuzz for min:{} - max:{}", min, max);
         if (min > max) {
             throw new IllegalArgumentException(String.format(MIN_GREATER_THAN_MAX, min, max));
+            //a custom Exception could be used here too, but for the case IllegalArgumentException works fine
         }
 
         List<String> fizzBuzzResult = calculateFizzBuzzStringResult(min, max);
